@@ -33,15 +33,34 @@ function oidToName(oid: string): string {
 }
 
 /**
- * Decode a PEM-encoded CSR (Certificate Signing Request).
+ * Convert a base64url string to standard base64.
+ */
+function base64UrlToBase64(input: string): string {
+  let b64 = input.replace(/-/g, "+").replace(/_/g, "/");
+  const pad = b64.length % 4;
+  if (pad === 2) b64 += "==";
+  else if (pad === 3) b64 += "=";
+  return b64;
+}
+
+/**
+ * Decode a CSR (Certificate Signing Request).
+ * Accepts PEM-encoded, standard base64, or base64url-encoded DER input.
  * Returns structured information about the CSR.
  */
-export function decodeCsr(pem: string): CsrInfo {
-  const b64 = pem
-    .trim()
-    .replace(/-----BEGIN (NEW )?CERTIFICATE REQUEST-----/g, "")
-    .replace(/-----END (NEW )?CERTIFICATE REQUEST-----/g, "")
-    .replace(/\s/g, "");
+export function decodeCsr(input: string): CsrInfo {
+  const trimmed = input.trim();
+
+  // Strip PEM headers if present, otherwise treat as raw base64/base64url
+  let b64: string;
+  if (trimmed.includes("-----BEGIN")) {
+    b64 = trimmed
+      .replace(/-----BEGIN (NEW )?CERTIFICATE REQUEST-----/g, "")
+      .replace(/-----END (NEW )?CERTIFICATE REQUEST-----/g, "")
+      .replace(/\s/g, "");
+  } else {
+    b64 = base64UrlToBase64(trimmed.replace(/\s/g, ""));
+  }
 
   const binary = atob(b64);
   const bytes = new Uint8Array(binary.length);

@@ -26,8 +26,11 @@ describe("decodeX509", () => {
     expect(certs).toHaveLength(1);
     const cert = certs[0];
     expect(cert.subject).toContain("localhost");
+    expect(cert.subjectParsed.commonName).toBe("localhost");
     expect(cert.issuer).toContain("localhost");
+    expect(cert.issuerParsed.commonName).toBe("localhost");
     expect(cert.serialNumber).toBeTruthy();
+    expect(cert.version).toBe(3);
     expect(cert.notBefore).toBeTruthy();
     expect(cert.notAfter).toBeTruthy();
     expect(cert.signatureAlgorithm).toContain("RSA");

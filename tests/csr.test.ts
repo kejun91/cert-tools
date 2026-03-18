@@ -31,4 +31,27 @@ describe("decodeCsr", () => {
   it("should throw on invalid input", () => {
     expect(() => decodeCsr("not a csr")).toThrow();
   });
+
+  it("should decode a raw base64 DER CSR (no PEM headers)", () => {
+    // Strip PEM headers to get raw base64
+    const rawB64 = TEST_CSR
+      .replace(/-----BEGIN CERTIFICATE REQUEST-----/, "")
+      .replace(/-----END CERTIFICATE REQUEST-----/, "")
+      .trim();
+    const info = decodeCsr(rawB64);
+    expect(info.subject["Common Name (CN)"]).toBe("test.example.com");
+    expect(info.publicKeyAlgorithm).toBe("RSA");
+  });
+
+  it("should decode a base64url-encoded DER CSR", () => {
+    // Convert PEM base64 to base64url
+    const rawB64 = TEST_CSR
+      .replace(/-----BEGIN CERTIFICATE REQUEST-----/, "")
+      .replace(/-----END CERTIFICATE REQUEST-----/, "")
+      .replace(/\s/g, "");
+    const b64url = rawB64.replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    const info = decodeCsr(b64url);
+    expect(info.subject["Common Name (CN)"]).toBe("test.example.com");
+    expect(info.publicKeyAlgorithm).toBe("RSA");
+  });
 });
