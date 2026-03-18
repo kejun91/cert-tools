@@ -1,0 +1,45 @@
+{
+  "name": "@kejun/cert-tools",
+  "version": "0.1.0",
+  "description": "Decode X.509 certificates and CSRs (Certificate Signing Requests) from PEM",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "x509",
+    "certificate",
+    "csr",
+    "pem",
+    "decoder",
+    "ssl",
+    "tls"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@peculiar/x509": "^1.14.3",
+    "asn1js": "^3.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.1"
+  }
+}
