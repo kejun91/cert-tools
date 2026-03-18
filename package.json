@@ -1,6 +1,6 @@
 {
   "name": "@kejun/cert-tools",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Decode X.509 certificates and CSRs (Certificate Signing Requests) from PEM",
   "type": "module",
   "main": "./dist/index.cjs",
